@@ -1,0 +1,62 @@
+---
+- name: Create ansible users
+  user:
+    name: "{{ item }}"
+    shell: /bin/bash
+  with_items: "{{ ssh_admins }}"
+
+- name: Create .ssh in homedirs
+  file:
+    path: "/home/{{ item }}/.ssh"
+    state: directory
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0755'
+  with_items: "{{ ssh_admins }}"
+  
+- name: Put public keys in place
+  copy:
+    src: "{{ item }}.pubkey"
+    dest: /home/{{ item }}/.ssh/authorized_keys
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0600'
+  with_items: "{{ ssh_admins }}"
+
+- name: make users sudo without password
+  template:
+    src: "99-users.j2"
+    dest: /etc/sudoers.d/99-users
+    owner: root
+    group: root
+    mode: '0440'
+  tags:
+    - admin_users
+
+- hostname:
+    name: "{{ inventory_hostname }}"
+    use: systemd
+
+- name: Set FQDN in user prompt
+  replace:
+    path: "/home/{{ item }}/.bashrc"
+    regexp: '\\h'
+    replace: '\\H'
+  with_items: "{{ ssh_admins }}"
+
+- name: Set FQDN in root prompt
+  replace:
+    path: "/root/.bashrc"
+    regexp: '\\h'
+    replace: '\\H'
+
+- name: Update repo cache
+  apt:
+    update_cache: yes
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages }}"
+
