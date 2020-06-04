@@ -63,3 +63,27 @@
     state: present
   with_items: "{{ packages }}"
 
+- name: reboot
+  shell: sleep 2 && shutdown -r now
+  async: 1
+  poll: 0
+
+- pause:
+    prompt: "we wait a few secondes" 
+    seconds: 2
+
+- name: wait voor ssh to come up
+  local_action: shell nc -4 -z "{{ hostvars[inventory_hostname].ip }} 22
+  become: no
+  register: result:
+  until: result.rc == 0
+  retries: 200
+  delay: 10
+
+- name: Show uptime
+  command: uptime
+  register: uptime
+
+- debug:
+    msg: "{{ uptime.stdout }}" 
+
