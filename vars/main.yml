@@ -1,0 +1,7 @@
+ssh_admins:
+  - harry
+
+packages:
+  - openssh-server
+
+

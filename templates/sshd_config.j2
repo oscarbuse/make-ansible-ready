@@ -1,0 +1,17 @@
+# {{ ansible_managed }}
+Port {{ sshd_port }}
+Protocol 2
+ListenAddress {{ hostvars[inventory_hostname]['ip'] }}
+PermitRootLogin no
+ChallengeResponseAuthentication no
+UsePAM yes
+X11Forwarding no
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp  /usr/lib/openssh/sftp-server
+PasswordAuthentication no
+AllowUsers{% for user in ssh_admins %} {{ user }}{% endfor %}
+
+ClientAliveInterval 300
+ClientAliveCountMax 2
+Banner /etc/ssh_banner.txt 

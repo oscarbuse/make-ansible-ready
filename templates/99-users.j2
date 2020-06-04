@@ -1,0 +1,3 @@
+# admin users
+{% for user in ssh_admins %}{{ user }} ALL=(ALL) NOPASSWD:ALL
+{% endfor %}
