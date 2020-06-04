@@ -33,9 +33,12 @@
   tags:
     - admin_users
 
-- hostname:
-    name: "{{ inventory_hostname }}"
-    use: systemd
+# for some reason this does not work...
+#- hostname:
+#    name: "{{ inventory_hostname }}"
+#    use: systemd
+- name: set hostname to inventory_hostname
+  shell: hostnamectl set-hostname "{{ inventory_hostname }}"
 
 - name: Set FQDN in user prompt
   replace:
