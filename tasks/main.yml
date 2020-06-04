@@ -75,7 +75,7 @@
 - name: wait voor ssh to come up
   local_action: shell nc -4 -z "{{ hostvars[inventory_hostname].ip }}" 22
   become: no
-  register: result:
+  register: result
   until: result.rc == 0
   retries: 200
   delay: 5
