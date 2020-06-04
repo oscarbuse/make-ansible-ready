@@ -53,6 +53,17 @@
     regexp: '\\h'
     replace: '\\H'
 
+- name: Remove the user 'vagrant'
+  user:
+    name: vagrant
+    state: absent
+    remove: yes
+
+- name: Remove sudo file for user vagratn
+  file:
+    path: /etc/sudoers.d/99_vagrant
+    state: absent
+
 - name: Update repo cache
   apt:
     update_cache: yes
