@@ -70,7 +70,7 @@
 
 - pause:
     prompt: "we wait a few secondes" 
-    seconds: 2
+    seconds: 5
 
 - name: wait voor ssh to come up
   local_action: shell nc -4 -z "{{ hostvars[inventory_hostname].ip }} 22
@@ -78,10 +78,11 @@
   register: result:
   until: result.rc == 0
   retries: 200
-  delay: 10
+  delay: 5
 
 - name: Show uptime
   command: uptime
+  remote_user: harry
   register: uptime
 
 - debug:
