@@ -3,5 +3,4 @@ ssh_admins:
 
 packages:
   - openssh-server
-
-
+  - python-passlib # for ansible htpasswd module
