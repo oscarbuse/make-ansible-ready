@@ -2,5 +2,4 @@ ssh_admins:
   - harry
 
 packages:
-  - openssh-server
-  - python-passlib # for ansible htpasswd module
+  - python3-passlib # for ansible htpasswd module
